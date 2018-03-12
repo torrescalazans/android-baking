@@ -2,10 +2,6 @@ apply plugin: 'com.android.application'
 apply from: '../config/quality/quality.gradle'
 
 android {
-    repositories {
-        google()
-    }
-
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
 
@@ -69,10 +65,7 @@ android {
         warning 'InvalidPackage'
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+    testOptions.unitTests.includeAndroidResources true
 }
 
 dependencies {

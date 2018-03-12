@@ -21,7 +21,6 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import io.reactivex.Observable;
-import com.torrescalazans.baking.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
