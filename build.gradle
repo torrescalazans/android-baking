@@ -1,0 +1,21 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        //noinspection GradleDynamicVersion
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.1'
+    distributionUrl = distributionUrl.replace("bin", "all")
+}
