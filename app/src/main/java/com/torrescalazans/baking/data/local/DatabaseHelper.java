@@ -6,6 +6,7 @@ import android.support.annotation.VisibleForTesting;
 
 import com.squareup.sqlbrite2.BriteDatabase;
 import com.squareup.sqlbrite2.SqlBrite;
+import com.torrescalazans.baking.data.model.Recipe;
 import com.torrescalazans.baking.data.model.Ribot;
 
 import java.util.Collection;
@@ -76,4 +77,49 @@ public class DatabaseHelper {
                 });
     }
 
+    public Observable<Recipe> setRecipes(final Collection<Recipe> newRecipes) {
+        return Observable.create(new ObservableOnSubscribe<Recipe>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Recipe> emitter) throws Exception {
+
+                if (emitter.isDisposed()) {
+                    return;
+                }
+
+                BriteDatabase.Transaction transaction = mDb.newTransaction();
+
+                try {
+                    mDb.delete(Db.RecipeTable.TABLE_NAME, null);
+
+                    for (Recipe recipe : newRecipes) {
+                        long result = mDb.insert(Db.RecipeTable.TABLE_NAME,
+                                Db.RecipeTable.toContentValues(recipe),
+                                SQLiteDatabase.CONFLICT_REPLACE);
+
+                        if (result >= 0) {
+                            emitter.onNext(recipe);
+                        }
+                    }
+
+                    transaction.markSuccessful();
+                    emitter.onComplete();
+                } finally {
+                    transaction.end();
+                }
+            }
+        });
+    }
+
+    public Observable<List<Recipe>> getRecipes() {
+        return mDb.createQuery(Db.RecipeTable.TABLE_NAME,
+                "SELECT * FROM " + Db.RecipeTable.TABLE_NAME)
+                .mapToList(new Function<Cursor, Recipe>() {
+
+                    @Override
+                    public Recipe apply(@NonNull Cursor cursor) throws Exception {
+                        return Recipe.create(Db.RecipeTable.parseCursor(cursor));
+                    }
+                });
+    }
 }

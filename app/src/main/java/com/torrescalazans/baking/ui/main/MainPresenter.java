@@ -1,5 +1,12 @@
 package com.torrescalazans.baking.ui.main;
 
+import com.torrescalazans.baking.data.DataManager;
+import com.torrescalazans.baking.data.model.Recipe;
+import com.torrescalazans.baking.data.model.Ribot;
+import com.torrescalazans.baking.injection.ConfigPersistent;
+import com.torrescalazans.baking.ui.base.BasePresenter;
+import com.torrescalazans.baking.util.RxUtil;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,11 +17,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import com.torrescalazans.baking.data.DataManager;
-import com.torrescalazans.baking.data.model.Ribot;
-import com.torrescalazans.baking.injection.ConfigPersistent;
-import com.torrescalazans.baking.ui.base.BasePresenter;
-import com.torrescalazans.baking.util.RxUtil;
 
 @ConfigPersistent
 public class MainPresenter extends BasePresenter<MainMvpView> {
@@ -72,4 +74,37 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 });
     }
 
+    public void loadRecipes() {
+        checkViewAttached();
+        RxUtil.dispose(mDisposable);
+        mDataManager.getRecipes()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<List<Recipe>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull List<Recipe> recipes) {
+                        if (recipes.isEmpty()) {
+                            getMvpView().showRecipesEmpty();
+                        } else {
+                            getMvpView().showRecipes(recipes);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Timber.e(e, "There was an error loading the recipes.");
+                        getMvpView().showError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
 }

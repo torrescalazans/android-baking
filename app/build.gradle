@@ -122,8 +122,10 @@ dependencies {
     // https://github.com/google/auto/issues/268
     compileOnly "com.jakewharton.auto.value:auto-value-annotations:$AUTO_VALUE_VERSION"
     compileOnly "com.ryanharter.auto.value:auto-value-gson:$AUTO_VALUE_GSON_VERSION"
+    implementation 'com.google.code.gson:gson:2.8.1'
     annotationProcessor "com.google.auto.value:auto-value:$AUTO_VALUE_VERSION"
     annotationProcessor 'com.ryanharter.auto.value:auto-value-parcel:0.2.4-rc2'
+    compile 'com.ryanharter.auto.value:auto-value-parcel-adapter:0.2.6'
     annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$AUTO_VALUE_GSON_VERSION"
     annotationProcessor "com.squareup:javapoet:$JAVAPOET_VERSION"
     // https://github.com/rharter/auto-value-parcel/issues/64

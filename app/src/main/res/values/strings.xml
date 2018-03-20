@@ -9,4 +9,7 @@
 
     <string name="empty_ribots">There aren\'t any ribots</string>
     <string name="error_loading_ribots">There was a problem loading the ribots</string>
+
+    <string name="empty_recipes">There aren\'t any recipes</string>
+
 </resources>

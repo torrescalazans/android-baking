@@ -7,6 +7,13 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.IBinder;
 
+import com.torrescalazans.baking.BakingApplication;
+import com.torrescalazans.baking.data.model.Recipe;
+import com.torrescalazans.baking.data.model.Ribot;
+import com.torrescalazans.baking.util.AndroidComponentUtil;
+import com.torrescalazans.baking.util.NetworkUtil;
+import com.torrescalazans.baking.util.RxUtil;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observer;
@@ -14,11 +21,6 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import com.torrescalazans.baking.BakingApplication;
-import com.torrescalazans.baking.data.model.Ribot;
-import com.torrescalazans.baking.util.AndroidComponentUtil;
-import com.torrescalazans.baking.util.NetworkUtil;
-import com.torrescalazans.baking.util.RxUtil;
 
 public class SyncService extends Service {
 
@@ -61,6 +63,32 @@ public class SyncService extends Service {
 
                     @Override
                     public void onNext(@NonNull Ribot ribot) {
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Timber.w(e, "Error syncing.");
+                        stopSelf(startId);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Timber.i("Synced successfully!");
+                        stopSelf(startId);
+                    }
+                });
+
+        RxUtil.dispose(mDisposable);
+        mDataManager.syncRecipes()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<Recipe>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Recipe recipe) {
                     }
 
                     @Override

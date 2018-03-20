@@ -3,10 +3,11 @@ package com.torrescalazans.baking.data.local;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.util.Date;
-
 import com.torrescalazans.baking.data.model.Name;
 import com.torrescalazans.baking.data.model.Profile;
+import com.torrescalazans.baking.data.model.Recipe;
+
+import java.util.Date;
 
 public class Db {
 
@@ -59,6 +60,53 @@ public class Db {
                     .setDateOfBirth(new Date(dobTime))
                     .setAvatar(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_AVATAR)))
                     .setBio(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BIO)))
+                    .build();
+        }
+    }
+
+    public abstract static class RecipeTable {
+        public static final String TABLE_NAME = "recipe";
+
+        public static final String COLUMN_ID = "id";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_INGREDIENTS = "ingredients";
+        public static final String COLUMN_STEPS = "steps";
+        public static final String COLUMN_SERVING = "serving";
+        public static final String COLUMN_IMAGE_URL = "image_url";
+
+        public static final String CREATE =
+                "CREATE TABLE " + TABLE_NAME + " (" +
+                        COLUMN_ID + " TEXT PRIMARY KEY, " +
+                        COLUMN_NAME + " TEXT NOT NULL, " +
+                        COLUMN_INGREDIENTS + " TEXT, " +
+                        COLUMN_STEPS + " TEXT, " +
+                        COLUMN_SERVING + " INTEGER NOT NULL, " +
+                        COLUMN_IMAGE_URL + " TEXT" +
+                        " ); ";
+
+        public static ContentValues toContentValues(Recipe recipe) {
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_ID, recipe.id());
+            values.put(COLUMN_NAME, recipe.name());
+
+            //values.put(COLUMN_INGREDIENTS, recipe.ingredients()); // TODO
+            //values.put(COLUMN_STEPS, recipe.steps());
+
+            values.put(COLUMN_SERVING, recipe.serving());
+            values.put(COLUMN_IMAGE_URL, recipe.imageUrl());
+            return values;
+        }
+
+        public static Recipe parseCursor(Cursor cursor) {
+            return Recipe.builder()
+                    .setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)))
+                    .setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)))
+
+                    //.setIngredients(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INGREDIENTS))) // TODO
+                    //.setSteps(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STEPS)))
+
+                    .setServing(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SERVING)))
+                    .setImageUrl(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL)))
                     .build();
         }
     }

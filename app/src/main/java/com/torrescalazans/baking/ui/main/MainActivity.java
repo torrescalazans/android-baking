@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.torrescalazans.baking.R;
 import com.torrescalazans.baking.data.SyncService;
+import com.torrescalazans.baking.data.model.Recipe;
 import com.torrescalazans.baking.data.model.Ribot;
 import com.torrescalazans.baking.ui.base.BaseActivity;
 import com.torrescalazans.baking.util.DialogFactory;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainMvpView {
 
@@ -52,7 +54,9 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         mRecyclerView.setAdapter(mRibotsAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMainPresenter.attachView(this);
-        mMainPresenter.loadRibots();
+        //mMainPresenter.loadRibots();
+
+        mMainPresenter.loadRecipes();
 
         if (getIntent().getBooleanExtra(EXTRA_TRIGGER_SYNC_FLAG, true)) {
             startService(SyncService.getStartIntent(this));
@@ -75,6 +79,11 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     }
 
     @Override
+    public void showRecipes(List<Recipe> recipes) {
+        Timber.i("showRecipes - Synced successfully!");
+    }
+
+    @Override
     public void showError() {
         DialogFactory.createGenericErrorDialog(this, getString(R.string.error_loading_ribots))
                 .show();
@@ -87,4 +96,8 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         Toast.makeText(this, R.string.empty_ribots, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void showRecipesEmpty() {
+        Toast.makeText(this, R.string.empty_recipes, Toast.LENGTH_LONG).show();
+    }
 }

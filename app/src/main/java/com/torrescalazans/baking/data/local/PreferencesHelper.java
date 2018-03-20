@@ -3,15 +3,15 @@ package com.torrescalazans.baking.data.local;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.torrescalazans.baking.injection.ApplicationContext;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import com.torrescalazans.baking.injection.ApplicationContext;
 
 @Singleton
 public class PreferencesHelper {
 
-    public static final String PREF_FILE_NAME = "android_boilerplate_pref_file";
+    public static final String PREF_FILE_NAME = "android_baking_pref_file";
 
     private final SharedPreferences mPref;
 

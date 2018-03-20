@@ -3,12 +3,14 @@ package com.torrescalazans.baking.injection.module;
 import android.app.Application;
 import android.content.Context;
 
+import com.torrescalazans.baking.data.remote.RecipesService;
+import com.torrescalazans.baking.data.remote.RibotsService;
+import com.torrescalazans.baking.injection.ApplicationContext;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import com.torrescalazans.baking.data.remote.RibotsService;
-import com.torrescalazans.baking.injection.ApplicationContext;
 
 /**
  * Provide application-level dependencies.
@@ -38,4 +40,9 @@ public class ApplicationModule {
         return RibotsService.Creator.newRibotsService();
     }
 
+    @Provides
+    @Singleton
+    RecipesService provideRecipesService() {
+        return RecipesService.Creator.newRecipesService();
+    }
 }
