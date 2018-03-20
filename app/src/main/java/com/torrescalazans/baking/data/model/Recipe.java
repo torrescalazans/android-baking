@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.ryanharter.auto.value.parcel.ParcelAdapter;
 
 import java.util.List;
@@ -30,23 +31,29 @@ import java.util.List;
 public abstract class Recipe implements Comparable<Recipe>, Parcelable {
 
     @NonNull
+    @SerializedName("id")
     public abstract int id();
 
     @NonNull
+    @SerializedName("name")
     public abstract String name();
 
     @NonNull
     @ParcelAdapter(Ingredient.ListTypeAdapter.class)
+    @SerializedName("ingredients")
     public abstract List<Ingredient> ingredients();
 
     @NonNull
     @ParcelAdapter(Step.ListTypeAdapter.class)
+    @SerializedName("steps")
     public abstract List<Step> steps();
 
     @NonNull
-    public abstract int serving();
+    @SerializedName("servings")
+    public abstract int servings();
 
     @Nullable
+    @SerializedName("image")
     public abstract String imageUrl();
 
     public static Recipe.Builder builder() {
@@ -55,7 +62,7 @@ public abstract class Recipe implements Comparable<Recipe>, Parcelable {
 
     public static Recipe create(Recipe recipe) {
         return new AutoValue_Recipe(recipe.id(), recipe.name(), recipe.ingredients(),
-                recipe.steps(), recipe.serving(), recipe.imageUrl());
+                recipe.steps(), recipe.servings(), recipe.imageUrl());
     }
 
     @AutoValue.Builder
@@ -64,7 +71,7 @@ public abstract class Recipe implements Comparable<Recipe>, Parcelable {
         public abstract Recipe.Builder setName(String name);
         public abstract Recipe.Builder setIngredients(List<Ingredient> ingredients);
         public abstract Recipe.Builder setSteps(List<Step> steps);
-        public abstract Recipe.Builder setServing(int serving);
+        public abstract Recipe.Builder setServings(int servings);
         public abstract Recipe.Builder setImageUrl(String imageUrl);
         public abstract Recipe build();
     }

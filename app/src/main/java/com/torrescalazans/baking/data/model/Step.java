@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -29,18 +30,23 @@ import java.util.List;
 public abstract class Step implements Parcelable {
 
     @NonNull
+    @SerializedName("id")
     public abstract int id();
 
     @NonNull
+    @SerializedName("shortDescription")
     public abstract String shortDescription();
 
     @NonNull
+    @SerializedName("description")
     public abstract String description();
 
     @Nullable
+    @SerializedName("videoURL")
     public abstract String videoUrl();
 
     @Nullable
+    @SerializedName("thumbnailURL")
     public abstract String thumbnailUrl();
 
     public static Step create(int id, String shortDescription, String description,

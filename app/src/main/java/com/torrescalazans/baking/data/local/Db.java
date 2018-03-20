@@ -92,7 +92,7 @@ public class Db {
             //values.put(COLUMN_INGREDIENTS, recipe.ingredients()); // TODO
             //values.put(COLUMN_STEPS, recipe.steps());
 
-            values.put(COLUMN_SERVING, recipe.serving());
+            values.put(COLUMN_SERVING, recipe.servings());
             values.put(COLUMN_IMAGE_URL, recipe.imageUrl());
             return values;
         }
@@ -105,7 +105,7 @@ public class Db {
                     //.setIngredients(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INGREDIENTS))) // TODO
                     //.setSteps(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STEPS)))
 
-                    .setServing(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SERVING)))
+                    .setServings(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SERVING)))
                     .setImageUrl(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL)))
                     .build();
         }

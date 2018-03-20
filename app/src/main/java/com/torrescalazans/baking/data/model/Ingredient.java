@@ -21,6 +21,7 @@ import android.support.annotation.NonNull;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -28,16 +29,19 @@ import java.util.List;
 public abstract class Ingredient implements Parcelable {
 
     @NonNull
-    public abstract int quantity();
+    @SerializedName("quantity")
+    public abstract double quantity();
 
     @NonNull
+    @SerializedName("measure")
     public abstract String measure();
 
     @NonNull
-    public abstract String name();
+    @SerializedName("ingredient")
+    public abstract String ingredient();
 
-    public static Ingredient create(int quantity, String measure, String name) {
-        return new AutoValue_Ingredient(quantity, measure, name);
+    public static Ingredient create(int quantity, String measure, String ingredient) {
+        return new AutoValue_Ingredient(quantity, measure, ingredient);
     }
 
     public static final class ListTypeAdapter implements com.ryanharter.auto.value.parcel.TypeAdapter<List<Ingredient>> {
