@@ -1,4 +1,3 @@
-package com.torrescalazans.baking.data.remote.mock;
 /*
  * Copyright (C) 2018 Jose Torres
  *
@@ -13,6 +12,8 @@ package com.torrescalazans.baking.data.remote.mock;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
+
+package com.torrescalazans.baking.data.remote.mock;
 
 import java.io.IOException;
 
@@ -196,7 +197,7 @@ public class MockInterceptor implements Interceptor {
             "      {\n" +
             "        \"id\": 1,\n" +
             "        \"shortDescription\": \"Starting prep\",\n" +
-            "        \"description\": \"1. Preheat the oven to 350�F. Butter the bottom and sides of a 9\\\"x13\\\" pan.\",\n" +
+            "        \"description\": \"1. Preheat the oven to 350\\u00b0F. Butter the bottom and sides of a 9\\\"x13\\\" pan.\",\n" +
             "        \"videoURL\": \"\",\n" +
             "        \"thumbnailURL\": \"\"\n" +
             "      },\n" +

@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
+
 package com.torrescalazans.baking.data.model;
 
 import android.os.Parcel;
@@ -43,16 +44,16 @@ public abstract class Step implements Parcelable {
 
     @Nullable
     @SerializedName("videoURL")
-    public abstract String videoUrl();
+    public abstract String videoURL();
 
     @Nullable
     @SerializedName("thumbnailURL")
-    public abstract String thumbnailUrl();
+    public abstract String thumbnailURL();
 
     public static Step create(int id, String shortDescription, String description,
-                              String videoUrl, String thumbnailUrl) {
+                              String videoURL, String thumbnailURL) {
 
-        return new AutoValue_Step(id, shortDescription, description, videoUrl, thumbnailUrl);
+        return new AutoValue_Step(id, shortDescription, description, videoURL, thumbnailURL);
     }
 
     public static final class ListTypeAdapter implements com.ryanharter.auto.value.parcel.TypeAdapter<List<Step>> {

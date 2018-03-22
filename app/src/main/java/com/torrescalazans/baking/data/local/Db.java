@@ -90,8 +90,8 @@ public class Db {
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         COLUMN_ID + " TEXT PRIMARY KEY, " +
                         COLUMN_NAME + " TEXT NOT NULL, " +
-                        COLUMN_INGREDIENTS + " TEXT, " +
-                        COLUMN_STEPS + " TEXT, " +
+                        COLUMN_INGREDIENTS + " TEXT NOT NULL, " +
+                        COLUMN_STEPS + " TEXT NOT NULL, " +
                         COLUMN_SERVING + " INTEGER NOT NULL, " +
                         COLUMN_IMAGE_URL + " TEXT" +
                         " ); ";

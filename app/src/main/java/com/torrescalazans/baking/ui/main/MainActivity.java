@@ -30,6 +30,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @Inject MainPresenter mMainPresenter;
     @Inject RibotsAdapter mRibotsAdapter;
+    @Inject RecipeAdapter mRecipeAdapter;
 
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
 
@@ -41,17 +42,20 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     public static Intent getStartIntent(Context context, boolean triggerDataSyncOnCreate) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(EXTRA_TRIGGER_SYNC_FLAG, triggerDataSyncOnCreate);
+
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         activityComponent().inject(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mRecyclerView.setAdapter(mRibotsAdapter);
+        //mRecyclerView.setAdapter(mRibotsAdapter);
+        mRecyclerView.setAdapter(mRecipeAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMainPresenter.attachView(this);
         //mMainPresenter.loadRibots();
@@ -80,7 +84,8 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @Override
     public void showRecipes(List<Recipe> recipes) {
-        Timber.i("showRecipes - Synced successfully!");
+        mRecipeAdapter.setRecipes(recipes);
+        mRecipeAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -98,6 +103,9 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     @Override
     public void showRecipesEmpty() {
+        mRecipeAdapter.setRecipes(Collections.<Recipe>emptyList());
+        mRecipeAdapter.notifyDataSetChanged();
+
         Toast.makeText(this, R.string.empty_recipes, Toast.LENGTH_LONG).show();
     }
 }
