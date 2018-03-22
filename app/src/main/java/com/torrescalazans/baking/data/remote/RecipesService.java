@@ -32,9 +32,9 @@ import retrofit2.http.GET;
 
 public interface RecipesService {
 
-    String ENDPOINT = "https://api.ribot.io/";
+    String ENDPOINT = "https://www.google.com/";
 
-    @GET("recipes/baking.json")
+    @GET("recipes")
     Observable<List<Recipe>> getRecipes();
 
     final static OkHttpClient client = new OkHttpClient

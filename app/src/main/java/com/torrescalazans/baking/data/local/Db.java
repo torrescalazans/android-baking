@@ -3,11 +3,23 @@ package com.torrescalazans.baking.data.local;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.torrescalazans.baking.data.model.Ingredient;
 import com.torrescalazans.baking.data.model.Name;
 import com.torrescalazans.baking.data.model.Profile;
 import com.torrescalazans.baking.data.model.Recipe;
+import com.torrescalazans.baking.data.model.Step;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import timber.log.Timber;
 
 public class Db {
 
@@ -86,25 +98,70 @@ public class Db {
 
         public static ContentValues toContentValues(Recipe recipe) {
             ContentValues values = new ContentValues();
+            Gson gson = new GsonBuilder().create();
+
             values.put(COLUMN_ID, recipe.id());
             values.put(COLUMN_NAME, recipe.name());
-
-            //values.put(COLUMN_INGREDIENTS, recipe.ingredients()); // TODO
-            //values.put(COLUMN_STEPS, recipe.steps());
-
+            values.put(COLUMN_INGREDIENTS, gson.toJson(recipe.ingredients()));
+            values.put(COLUMN_STEPS, gson.toJson(recipe.steps()));
             values.put(COLUMN_SERVING, recipe.servings());
             values.put(COLUMN_IMAGE_URL, recipe.imageUrl());
+
             return values;
         }
 
         public static Recipe parseCursor(Cursor cursor) {
+
+            // TODO How to use Gson + AutoValue to avoid to create the Ingredints and Steps lists by hand?
+            String jsonIngredients = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INGREDIENTS));
+            List<Ingredient> ingredients = new ArrayList<>();
+
+            try {
+                JSONArray ingredientsJsonArray = new JSONArray(jsonIngredients);
+
+                for (int i = 0; i < ingredientsJsonArray.length(); i++) {
+                    JSONObject jsonObject = ingredientsJsonArray.getJSONObject(i);
+
+                    Ingredient ingredient = Ingredient.create(
+                            jsonObject.getInt("quantity"),
+                            jsonObject.getString("measure"),
+                            jsonObject.getString("ingredient")
+                    );
+
+                    ingredients.add(ingredient);
+                }
+            } catch(JSONException e) {
+                Timber.e("Error processing Ingredient JSON data");
+            }
+
+            String jsonSteps = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STEPS));
+            List<Step> steps = new ArrayList<>();
+
+            try {
+                JSONArray stepsJsonArray = new JSONArray(jsonSteps);
+
+                for (int i = 0; i < stepsJsonArray.length(); i++) {
+                    JSONObject jsonObject = stepsJsonArray.getJSONObject(i);
+
+                    Step step = Step.create(
+                            jsonObject.getInt("id"),
+                            jsonObject.getString("shortDescription"),
+                            jsonObject.getString("description"),
+                            jsonObject.getString("videoURL"),
+                            jsonObject.getString("thumbnailURL")
+                    );
+
+                    steps.add(step);
+                }
+            } catch(JSONException e) {
+                Timber.e("Error processing Step JSON data");
+            }
+
             return Recipe.builder()
                     .setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)))
                     .setName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)))
-
-                    //.setIngredients(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_INGREDIENTS))) // TODO
-                    //.setSteps(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_STEPS)))
-
+                    .setIngredients(ingredients)
+                    .setSteps(steps)
                     .setServings(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SERVING)))
                     .setImageUrl(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE_URL)))
                     .build();
